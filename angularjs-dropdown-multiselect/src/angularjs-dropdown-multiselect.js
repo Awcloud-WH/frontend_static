@@ -14,7 +14,8 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                 events: '=',
                 searchFilter: '=?',
                 translationTexts: '=',
-                groupBy: '@'
+                groupBy: '@',
+                selectRadio:"="
             },
             template: function (element, attrs) {
                 var checkboxes = attrs.checkboxes ? true : false;
@@ -286,7 +287,11 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                         $scope.selectedModel.splice(_.findIndex($scope.selectedModel, findObj), 1);
                         $scope.externalEvents.onItemDeselect(findObj);
                     } else if (!exists && ($scope.settings.selectionLimit === 0 || $scope.selectedModel.length < $scope.settings.selectionLimit)) {
-                        $scope.selectedModel.push(finalObj);
+                        if($scope.selectRadio){
+                            $scope.selectedModel = [finalObj];
+                        }else{
+                            $scope.selectedModel.push(finalObj);
+                        }
                         $scope.externalEvents.onItemSelect(finalObj);
                     }
                     if ($scope.settings.closeOnSelect) $scope.open = false;
